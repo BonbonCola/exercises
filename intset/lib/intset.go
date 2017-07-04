@@ -64,3 +64,8 @@ func (s *IntSet) String() string {
 	buf.WriteByte('}')
 	return buf.String()
 }
+
+//Len returns cuantity of elements
+func (s *IntSet) Len() int {
+	return len(s.words)
+}
