@@ -65,7 +65,18 @@ func (s *IntSet) String() string {
 	return buf.String()
 }
 
-//Len returns cuantity of elements
+//Len returns quantity of elements
 func (s *IntSet) Len() int {
-	return len(s.words)
+	var count int
+	for _, word := range s.words {
+		if word == 0 {
+			continue
+		}
+		for j := 0; j < 64; j++ {
+			if word&(1<<uint(j)) != 0 {
+				count = count + 1
+			}
+		}
+	}
+	return count
 }

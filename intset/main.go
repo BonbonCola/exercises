@@ -13,8 +13,9 @@ func main() {
 	y.Add(4)
 
 	fmt.Println(x.String())
-	fmt.Println(y.Len())
+	fmt.Println(x.Len())
 }
 
 // 1 2 3 4
 // 1 0 1 0
+// 1
