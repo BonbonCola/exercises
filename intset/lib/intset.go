@@ -80,3 +80,12 @@ func (s *IntSet) Len() int {
 	}
 	return count
 }
+
+// Remove remove the non-negative value x from the set.
+func (s *IntSet) Remove(x int) {
+	word, bit := x/64, uint(x%64)
+	// for word >= len(s.words) {
+	// 	s.words = append(s.words, 0)
+	// }
+	s.words[word] ^= 1 << bit
+}
