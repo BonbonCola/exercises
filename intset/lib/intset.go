@@ -29,6 +29,17 @@ func (s *IntSet) Add(x int) {
 	s.words[word] |= 1 << bit
 }
 
+// AddAll adds the non-negative values  to the set.
+func (s *IntSet) AddAll(values ...int) {
+	for _, x := range values {
+		word, bit := x/64, uint(x%64)
+		for word >= len(s.words) {
+			s.words = append(s.words, 0)
+		}
+		s.words[word] |= 1 << bit
+	}
+}
+
 // UnionWith sets s to the union of s and t.
 func (s *IntSet) UnionWith(t *IntSet) {
 	for i, tword := range t.words {
@@ -39,10 +50,6 @@ func (s *IntSet) UnionWith(t *IntSet) {
 		}
 	}
 }
-
-//!-intset
-
-//!+string
 
 // String returns the set as a string of the form "{1 2 3}".
 func (s *IntSet) String() string {
@@ -84,8 +91,28 @@ func (s *IntSet) Len() int {
 // Remove remove the non-negative value x from the set.
 func (s *IntSet) Remove(x int) {
 	word, bit := x/64, uint(x%64)
-	// for word >= len(s.words) {
-	// 	s.words = append(s.words, 0)
-	// }
 	s.words[word] ^= 1 << bit
+}
+
+//Clear remove all values from the set.
+func (s *IntSet) Clear() {
+	for _, word := range s.words {
+		if word == 0 {
+			continue
+		}
+		for j := 0; j < 64; j++ {
+			if word&(1<<uint(j)) != 0 {
+				word ^= 1 << uint(j)
+			}
+		}
+	}
+}
+
+//Copy return a copy of s
+func (s *IntSet) Copy() *IntSet {
+	var t *IntSet
+	for i, sword := range s.words {
+		t.words[i] = sword
+	}
+	return t
 }
